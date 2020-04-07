@@ -7,7 +7,6 @@ file="$1"
 base="${file%.*}"
 filename="${base##*/}"
 
-reset
 if [ ${file: -3} == ".md" ]
 then
 	echo "Compiling md file to pdf..."
@@ -23,7 +22,7 @@ then
 	elif [ ! -d "metafiles" ]
 	then
 		echo "Compiling tex file to pdf..."
-		pdflatex $file
+		pdflatex -interaction=nonstopmode -synctex=1 $file
 	fi
 elif [ ${file: -2} == ".R" ]
 then

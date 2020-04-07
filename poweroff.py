@@ -10,6 +10,7 @@ quit = "q - quit\n"
 yourinp= "\nYour input: "
 msg = welcomemsg + shoutdown + reboot + logout + lock + quit + yourinp
 
+
 def title():
     print("  ____                              __  __                                ")
     print(" |  _ \ _____      _____ _ __ ___  / _|/ _|    _ __ ___   ___ _ __  _   _ ")
@@ -19,30 +20,40 @@ def title():
     print("                                                           by saulpierotti")
 
 
-def check_not_running():
-    if os.path.exists("poweroff_menu.running"):
-        return False
-    else:
-        open("poweroff_menu.running","w")
-        return True
+# def reset():
+#     if os.path.exists("poweroff_menu.running"):
+#         if not_running != False: #removes the running file if this istance created it
+#             os.remove("poweroff_menu.running")
+
+
+# def check_not_running():
+#     if os.path.exists("poweroff_menu.running"):
+#         return False
+#     else:
+#         open("poweroff_menu.running","w")
+#         return True
 
 
 def cmd_s():
+#    reset()
     os.system("systemctl poweroff")
     return
 
 
 def cmd_r():
+#    reset()
     os.system("systemctl reboot")
     return
 
 
 def cmd_e():
+#    reset()
     os.system("i3-msg exit")
     return
 
 
 def cmd_l():
+#    reset()
     os.system("xscreensaver-command -lock")
     return
 
@@ -88,7 +99,7 @@ def confirm():  # customise dialog for user input
     else:
         print("\nReached confirm() else statement 1, this should not happen") # control statement for debugging
         return False
-    conf_inp = input("\nDo you really want to "+ msg +"? (y/n)\nYour input: ") 
+    conf_inp = input("\nDo you really want to "+ msg +"? (y/n)\nYour input: ")
     assert conf_inp == "y" or conf_inp == "n"
     if conf_inp == "y":
         print("\nOperation confirmed")
@@ -99,13 +110,13 @@ def confirm():  # customise dialog for user input
     else:
         print("\nReached confirm() else statement 2, this should not happen")
         return False
-try:
-    not_running = check_not_running()
-    if not_running:
-        title()
-        p_menu()
-finally:
-    if not_running != False: #removes the running file if this istance created it
-        os.remove("poweroff_menu.running")
+
+# try:
+#    not_running = check_not_running()
+#    if not_running:
+title()
+p_menu()
+# finally:
+#    reset()
 
 # print("poweroff.py ended")
