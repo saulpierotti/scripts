@@ -24,13 +24,19 @@ echo
 echo "syncing bioscripts..."
 echo
 cd /home/saul/bioscripts
-git_update.sh
+/home/saul/.scripts/git_update.sh
 echo
 echo
 echo "syncing .scripts..."
 echo
 cd /home/saul/.scripts
-git_update.sh
+/home/saul/.scripts/git_update.sh
+echo
+echo
+echo "syncing dotfiles..."
+echo
+cd /home/saul/dotfiles
+/home/saul/.scripts/git_update.sh
 echo
 echo
 
