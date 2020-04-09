@@ -35,7 +35,7 @@ echo
 echo
 echo "syncing dotfiles..."
 echo
-cd /home/saul/dotfiles
+cd /home/saul/.dotfiles
 /home/saul/.scripts/git_update.sh
 echo
 echo
