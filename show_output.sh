@@ -7,5 +7,5 @@ base="${file%.*}"
 
 if [ -f $base.pdf ]
 then
-	zathura $base.pdf&
+	zathura $base.pdf &
 fi
