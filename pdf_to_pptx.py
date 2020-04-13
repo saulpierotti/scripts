@@ -1,4 +1,18 @@
-#!~/miniconda3/envs/pdf_to_pptx/bin/python3
+#!/home/saul/miniconda3/envs/pdf_to_pptx/bin/python
+
+# Adapted by Saul from:
+#    git@github.com:TomAnthony/pdf-to-powerpoint.git
+
+# Requirements:
+#   python3
+#   lxml==4.2.1
+#   pdf2image==0.1.14
+#   Pillow==5.1.0
+#   python-pptx==0.6.10
+#   XlsxWriter==1.0.5
+#   poppler
+
+
 import os, sys
 
 from PIL import Image
