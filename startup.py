@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# print("poweroff.py in execution")
+
 import os
 
 welcomemsg = "\nSpecify the desired action:\n\n"
@@ -15,33 +15,11 @@ def title():
     print("   _____ _             _ ")
     print("  / ____| |           | |")
     print(" | (___ | |_ __ _ _ __| |_ _   _ _ __    _ __ ___   ___ _ __  _   _")
-    print(
-        "  \___ \| __/ _` | '__| __| | | | '_ \  | '_ ` _ \ / _ \ '_ \| | | |"
-    )
-    print(
-        "  ____) | || (_| | |  | |_| |_| | |_) | | | | | | |  __/ | | | |_| |"
-    )
-    print(
-        " |_____/ \__\__,_|_|   \__|\__,_| .__/  |_| |_| |_|\___|_| |_|\__,_|"
-    )
-    print(
-        "                                | |                  by saulpierotti"
-    )
+    print("  \___ \| __/ _` | '__| __| | | | '_ \  | '_ ` _ \ / _ \ '_ \| | | |")
+    print("  ____) | || (_| | |  | |_| |_| | |_) | | | | | | |  __/ | | | |_| |")
+    print(" |_____/ \__\__,_|_|   \__|\__,_| .__/  |_| |_| |_|\___|_| |_|\__,_|")
+    print("                                | |                  by saulpierotti")
     print("                                |_|")
-
-
-# def reset():
-#     if os.path.exists("poweroff_menu.running"):
-#         if not_running != False: #removes the running file if this istance created it
-#             os.remove("poweroff_menu.running")
-
-
-# def check_not_running():
-#     if os.path.exists("poweroff_menu.running"):
-#         return False
-#     else:
-#         open("poweroff_menu.running","w")
-#         return True
 
 
 def cmd_s():
