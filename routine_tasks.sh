@@ -24,6 +24,7 @@ for env in $ENVS; do
     conda env export -n $env > $HOME/.pkg_history/conda/envs-$NOW/$env.yml
     echo "Exporting $env"
 done
+find $HOME/.pkg_history/conda/ -type d -mtime +30 -name 'envs-*' -exec rm -fr {} \;
 echo
 
 # update the remote github repo for the notebook, bioscripts and scripts
