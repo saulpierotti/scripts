@@ -1,3 +1,3 @@
 source ~/.condainit
-conda activate jupyter
+conda activate
 jupyter notebook
