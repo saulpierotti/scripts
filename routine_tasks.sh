@@ -14,6 +14,18 @@ echo
 echo
 echo
 
+# stores a list of pkgs in my conda envs
+echo "exporting conda envs..."
+echo
+NOW=$(date "+%Y-%m-%d")
+mkdir $HOME/.pkg_history/conda/envs-$NOW
+ENVS=$(conda env list | grep '^\w' | cut -d' ' -f1)
+for env in $ENVS; do
+    conda env export -n $env > $HOME/.pkg_history/conda/envs-$NOW/$env.yml
+    echo "Exporting $env"
+done
+echo
+
 # update the remote github repo for the notebook, bioscripts and scripts
 echo "syncing markdown_notebook..."
 echo
