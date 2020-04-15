@@ -2,7 +2,7 @@
 # in order to make cd work I need to source it, not run
 
 tmp="$(sudo mktemp)"
-sudo ranger --choosedir="$tmp" "$@"
+sudo ranger --choosedir="$tmp" "$@" .
 if [ -f "$tmp" ]; then
 	dir="$(sudo cat "$tmp")"
 	sudo rm -f "$tmp"
