@@ -28,9 +28,9 @@ find $HOME/.pkg_history/conda/ -type d -mtime +30 -name 'envs-*' -exec rm -fr {}
 echo
 
 # update the remote github repo for the notebook, bioscripts and scripts
-echo "syncing markdown_notebook..."
+echo "syncing notebook..."
 echo
-cd /home/saul/markdown_notebook
+cd /home/saul/notebook
 git_update.sh
 echo
 echo
