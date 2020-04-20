@@ -4,11 +4,11 @@ import os
 
 welcomemsg = "\nSpecify the desired action:\n\n"
 startx = "x - start the graphic environment\n"
-cmd = "c - continue to virtual console\n"
+startxgnome = "xg - start the graphic environment with gnome\n"
 shutdown = "s - shutdown\n"
 reboot = "r - reboot\n"
 yourinp = "\nYour input: "
-msg = welcomemsg + startx + cmd + shutdown + reboot + yourinp
+msg = welcomemsg + startx + startxgnome + shutdown + reboot + yourinp
 
 
 def title():
@@ -40,9 +40,9 @@ def cmd_x():
     return
 
 
-def cmd_c():
+def cmd_xg():
     #    reset()
-    os.system("bash")
+    os.system('export WM="gnome-session";startx')
     return
 
 
@@ -52,13 +52,13 @@ def p_menu():  # create an infinite loop that exits via return
         inp = input(msg)  # ask for user input printing allowed values
         try:  # try statement
             assert (
-                (inp == "x") or (inp == "c") or (inp == "r") or (inp == "s")
+                (inp == "x") or (inp == "xg") or (inp == "r") or (inp == "s")
             )  # check input
-            if inp == "x":  # test different imput values and take actions
+            if inp == "x":  # test different input values and take actions
                 cmd_x()
                 return
-            elif inp == "c":
-                cmd_c()
+            if inp == "xg":  # test different input values and take actions
+                cmd_xg()
                 return
             elif inp == "r":
                 if confirm() == True:
@@ -83,10 +83,10 @@ def confirm():  # customise dialog for user input
         msg = "shutdown the system"
     elif inp == "r":
         msg = "reboot the system"
-    elif inp == "c":
-        msg = "going to virtual console"
     elif inp == "x":
         msg = "starting the graphic environment"
+    elif inp == "xg":
+        msg = "starting the graphic environment with gnome"
     else:
         print(
             "\nReached confirm() else statement 1, this should not happen"
@@ -105,12 +105,5 @@ def confirm():  # customise dialog for user input
         return False
 
 
-# try:
-#    not_running = check_not_running()
-#    if not_running:
 title()
 p_menu()
-# finally:
-#    reset()
-
-# print("poweroff.py ended")
