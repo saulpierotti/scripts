@@ -10,7 +10,7 @@ filename="${base##*/}"
 if [ ${file: -3} == ".md" ]
 then
 	echo "Compiling md file to pdf..."
-	pandoc --filter pandoc-citeproc -V geometry:margin=1in  $file -o $base.pdf
+	pandoc --citeproc -V geometry:margin=1in  $file -o $base.pdf
 elif [ ${file: -4} == ".tex" ]
 then
 	if [ -d "metafiles" ]
