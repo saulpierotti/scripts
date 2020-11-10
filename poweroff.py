@@ -54,7 +54,7 @@ def cmd_e():
 
 def cmd_l():
 #    reset()
-    os.system("xscreensaver-command -lock")
+    os.system("xautolock -locknow")
     return
 
 def p_menu():   # create an infinite loop that exits via return
