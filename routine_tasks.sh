@@ -34,9 +34,9 @@ cd /home/saul/notebook
 git_update.sh
 echo
 echo
-echo "syncing bioscripts..."
+echo "syncing .bioscripts..."
 echo
-cd /home/saul/bioscripts
+cd /home/saul/.bioscripts
 /home/saul/.scripts/git_update.sh
 echo
 echo
@@ -46,7 +46,7 @@ cd /home/saul/.scripts
 /home/saul/.scripts/git_update.sh
 echo
 echo
-echo "syncing dotfiles..."
+echo "syncing .dotfiles..."
 echo
 cd /home/saul/.dotfiles
 /home/saul/.scripts/git_update.sh
