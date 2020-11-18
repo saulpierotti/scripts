@@ -1,2 +1,2 @@
 #!/bin/bash
-$TERMCMD -f -e "python3 /home/saul/.scripts/poweroff.py"
+$TERMCMD --fullscreen -e "python3 /home/saul/.scripts/poweroff.py"
