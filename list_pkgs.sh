@@ -1,5 +1,5 @@
 DATE=$(date "+%Y.%m.%d-%H.%M")
-MY_PATH=~saul/.pkg_history
+MY_PATH=$HOME/.pkg_history
 
 OFF=$MY_PATH/pacman/pkglist_off-$DATE.txt
 AUR=$MY_PATH/aur/pkglist_aur-$DATE.txt

@@ -8,5 +8,5 @@ fi
 
 file="$(readlink "$link")"
 
-rm $link
+rm "$link"
 mv "$file" "$link"
