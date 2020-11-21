@@ -1,5 +1,13 @@
+#!/bin/bash
+
+if [ "$(whoami)" = "root" ]; then
+    USER_HOME="$(eval echo ~${SUDO_USER})"
+else
+    USER_HOME="$HOME"
+fi
+
 DATE=$(date "+%Y.%m.%d-%H.%M")
-MY_PATH=$HOME/.pkg_history
+MY_PATH=$USER_HOME/.pkg_history
 
 OFF=$MY_PATH/pacman/pkglist_off-$DATE.txt
 AUR=$MY_PATH/aur/pkglist_aur-$DATE.txt
