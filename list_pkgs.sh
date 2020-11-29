@@ -1,21 +1,19 @@
 #!/bin/bash
 
 if [ "$(whoami)" = "root" ]; then
-    USER_HOME="$(eval echo ~${SUDO_USER})"
+    USER_HOME="$(eval echo ~"${SUDO_USER}")"
 else
     USER_HOME="$HOME"
 fi
 
-DATE=$(date "+%Y.%m.%d-%H.%M")
 MY_PATH=$USER_HOME/.pkg_history
 
-OFF=$MY_PATH/pacman/pkglist_off-$DATE.txt
-AUR=$MY_PATH/aur/pkglist_aur-$DATE.txt
+OFF=$MY_PATH/pacman/pkglist_official.txt
+AUR=$MY_PATH/aur/pkglist_arch_user_repository.txt
 
-pacman -Qqen > $OFF
-pacman -Qqem > $AUR
+echo "Saving list of installed packages..."
+pacman -Qqen >"$OFF"
+pacman -Qqem >"$AUR"
 
-# remove older than 30 days
-echo "Removing the following old log files..."
-find $MY_PATH -type f -name 'pkglist*' -mtime +30
-find $MY_PATH -type f -name 'pkglist*' -mtime +30 -exec rm {} \;
+echo "Syncing to GitHub..."
+routine_tasks.sh

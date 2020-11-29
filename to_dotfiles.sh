@@ -12,7 +12,7 @@ for input in "$@"; do
         USER_HOME="$HOME"
     fi
 
-    dotfiles_repo_folder="$USER_HOME/.dotfiles"
+    dotfiles_repo_folder="$USER_HOME/.dotfiles/root"
 
     if [ ! -d "$dotfiles_repo_folder" ]; then
         echo "$dotfiles_repo_folder does not exist! Aborting..."
