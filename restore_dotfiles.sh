@@ -34,4 +34,9 @@ process() {
 }
 
 explore "$dotfiles_root"
+
+# /etc/fstab does not work as a symlink
+echo "Restoring /etc/fstab as a copy instead of symlink..."
+cp "$USER_HOME/.dotfiles/fstab" "/etc/fstab"
+
 shopt -u dotglob

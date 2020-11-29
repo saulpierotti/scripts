@@ -27,6 +27,11 @@ for input in "$@"; do
     # get the full path
     original_file_fullpath=$(realpath "$input")
 
+    if [ "$original_file_fullpath" == "/etc/fstab" ]; then
+        echo "Refusing to symlink /etc/fstab since it will not work"
+        exit 0
+    fi
+
     if [ ! -f "$original_file_fullpath" ]; then
         # strip the trailing / if present
         original_file_fullpath=${original_file_fullpath%/}

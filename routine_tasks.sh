@@ -1,37 +1,21 @@
 #!/bin/bash
+# synchronise all my important git repositories
+
+commit_message=routine_tasks.sh
+git_repos="
+    $HOME/notebook
+    $HOME/.dotfiles
+    $HOME/.bioscripts
+    $HOME/.scripts
+    "
 
 echo "Routine task executor script"
-echo
-date
-echo
-echo
 
-# update the remote github repo for the notebook, bioscripts and scripts
-echo "syncing notebook..."
-echo
-cd "/home/saul/notebook" || return
-git_update.sh
-echo
-echo
-echo "syncing .bioscripts..."
-echo
-cd "/home/saul/.bioscripts" || return
-
-git_update.sh
-echo
-echo
-echo "syncing .scripts..."
-echo
-cd "/home/saul/.scripts" || return
-/home/saul/.scripts/git_update.sh
-echo
-echo
-echo "syncing .dotfiles..."
-echo
-cd "/home/saul/.dotfiles" || return
-git_update.sh
-echo
-echo
+for folder in $git_repos; do
+    echo "syncing $folder..."
+    cd "$folder" || return
+    git_update.sh "$commit_message"
+done
 
 # end confirmation
-echo "end of the scheduler reached"
+echo "End of the scheduler reached"
