@@ -30,13 +30,18 @@ process() {
     # remove the prefix $dotfiles_root
     FILE_IN_SYSTEM="${1/#$dotfiles_root/}"
     echo "Linking $FILE_IN_REPO to $FILE_IN_SYSTEM"
-    ln -sf "$FILE_IN_REPO" "$FILE_IN_SYSTEM"
+    if [ "$FILE_IN_SYSTEM" == "/etc/fstab" ]; then
+        echo "Refusing to symlink /etc/fstab"
+    else
+        ln -sf "$FILE_IN_REPO" "$FILE_IN_SYSTEM"
+    fi
 }
 
 explore "$dotfiles_root"
 
 # /etc/fstab does not work as a symlink
 echo "Restoring /etc/fstab as a copy instead of symlink..."
+rm "/etc/fstab"
 cp "$USER_HOME/.dotfiles/fstab" "/etc/fstab"
 
 shopt -u dotglob
