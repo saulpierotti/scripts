@@ -6,6 +6,7 @@ git_repos="
     $HOME/notebook
     $HOME/.dotfiles
     $HOME/.scripts
+    $HOME/.bioscripts
     "
 
 echo "Routine task executor script"
@@ -16,7 +17,8 @@ for folder in $git_repos; do
     git add -A
     git commit -m "$commit_message"
     # in this order so to leave origin as the push default
-    git push backup master
+    git push backup-gitlab master
+    git push backup-bitbucket master
     git push origin master
 done
 
