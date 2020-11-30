@@ -14,7 +14,7 @@ for folder in $git_repos; do
     echo "syncing $folder..."
     cd "$folder" || return
     git add -A
-    git commit -m "$commit_message" .
+    git commit -m "$commit_message"
     # in this order so to leave origin as the push default
     git push -u backup
     git push -u origin
