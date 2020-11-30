@@ -21,4 +21,8 @@ snap list >"$SNAP"
 
 echo "Syncing to GitHub..."
 cd "$DOT_REPO" || return
-git_update.sh "list_pkgs.sh automated commit"
+git add -A
+git commit -m "list_pkgs.sh automated commit"
+git push backup-gitlab master
+git push backup-bitbucket master
+git push origin master
