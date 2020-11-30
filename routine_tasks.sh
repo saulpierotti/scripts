@@ -16,8 +16,8 @@ for folder in $git_repos; do
     git add -A
     git commit -m "$commit_message"
     # in this order so to leave origin as the push default
-    git push -u backup
-    git push -u origin
+    git push backup master
+    git push origin master
 done
 
 # end confirmation
