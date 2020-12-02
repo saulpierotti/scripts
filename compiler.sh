@@ -1,37 +1,45 @@
 #!/bin/bash
-# This script will compile or run another finishing operation on a document. I
-# have this script run via vim.
+# This script will compile or execute its argument. I have this script run via
+# a vim shortcut to quickly compile or execute my files.
 
-# set variables for the operation
 file="$1"
 base="${file%.*}"
-filename="${base##*/}"
+mimetype=$(file --mime-type -b "$file")
 
-if [ "${file: -3}" == ".md" ]; then
-    echo "Compiling md file to pdf..."
-    command="pandoc $file
-    --citeproc
-    -V colorlinks
-    -V geometry:a4paper
-    -V geometry:margin=1in
-    -o $base.pdf"
-elif [ "${file: -4}" == ".tex" ]; then
-    if [ -d "metafiles" ]; then
-        command="pdflatex -output-directory=metafiles $file;mv
-        metafiles/$filename.pdf $base.pdf; mv metafiles/$filename.bcf
-        $base.bcf"
-    elif [ ! -d "metafiles" ]; then
-        echo "Compiling tex file to pdf..."
-        command="pdflatex -interaction=nonstopmode -synctex=1 $file"
-    fi
-elif [ "${file: -2}" == ".R" ]; then
-    echo "Executing R script..."
-    command="Rscript $file"
-elif [ "${file: -3}" == ".py" ]; then
-    echo "Executing python script..."
+case $mimetype in
+"text/x-shellscript")
+    echo "Recognized filetype: shell"
+    command="bash $file"
+    ;;
+"text/x-script.python")
+    echo "Recognized filetype: python"
     command="python $file"
-else
-    echo "Filetype not recognized: I do not know what to do"
-fi
+    ;;
+"text/x-tex")
+    echo "Recognized filetype: tex"
+    command="pdflatex -interaction=nonstopmode -synctex=1 $file"
+    ;;
+"text/plain") # includes markdown and many others
+    case $file in
+    *.md)
+        echo "Recognized filetype: markdown"
+        command="pandoc $file
+         --citeproc
+         -V colorlinks
+         -V geometry:a4paper
+         -V geometry:margin=1in
+         -o $base.pdf"
 
+        ;;
+    *)
+        echo "Recognized filetype: plain text"
+        ;;
+    esac
+    ;;
+*)
+    echo "Unmanaged file type: $mimetype"
+    ;;
+esac
+
+# execute the command
 $command
