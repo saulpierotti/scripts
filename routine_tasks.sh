@@ -3,10 +3,8 @@
 
 commit_message=routine_tasks.sh
 git_repos="
-    $HOME/notebook
     $HOME/.dotfiles
     $HOME/.scripts
-    $HOME/.bioscripts
     "
 
 echo "Routine task executor script"
