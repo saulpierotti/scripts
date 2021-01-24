@@ -2,11 +2,11 @@
 # This script will compile or execute its argument. I have this script run via
 # a vim shortcut to quickly compile or execute my files.
 
-file="$1"
+file="$*" # concatenate all the inputs, this prevents splitting at spaces
 base="${file%.*}"
 mimetype=$(file --mime-type -b "$file")
 
-case $mimetype in
+case "$mimetype" in
 "text/x-shellscript")
     echo "Recognized filetype: shell"
     command="bash $file"
