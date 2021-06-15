@@ -31,6 +31,14 @@ case "$mimetype" in
          -o $base.pdf"
 
         ;;
+    *.R)
+        echo "Recognized filetype: R"
+        command="Rscript $file"
+        ;;
+    *.py)
+        echo "Recognized filetype: Python"
+        command="python $file"
+        ;;
     *)
         echo "Recognized filetype: plain text"
         ;;
