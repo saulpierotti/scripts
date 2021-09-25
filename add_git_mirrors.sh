@@ -4,7 +4,7 @@
 
 target=".git/config"
 if [ -f "$target" ]; then
-    origin=$(sed -n "/\[remote \"origin\"]/,/\[*\]/p" $target | head -n -1)
+    origin=$(sed -n "/\[remote \"origin\"]/,/\[*\]/p" $target | ghead -n -1)
     if ! grep -q "\[remote \"backup-bitbucket\"\]" "$target"; then
         bitbucket=$(echo "${origin//git@github.com/git@bitbucket.org}" |
             sed "s/\[remote \"origin\"\]/\[remote \"backup-bitbucket\"\]/")
