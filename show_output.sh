@@ -5,7 +5,6 @@ file=$1
 path="${file%\\*}"
 base="${file%.*}"
 
-if [ -f $base.pdf ]
-then
-	zathura $base.pdf &
+if [ -f $base.pdf ]; then
+    open -a Skim.app $base.pdf &
 fi
