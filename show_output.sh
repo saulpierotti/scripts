@@ -6,5 +6,5 @@ path="${file%\\*}"
 base="${file%.*}"
 
 if [ -f $base.pdf ]; then
-    open -a Skim.app $base.pdf &
+    open -a Preview.app $base.pdf &
 fi
