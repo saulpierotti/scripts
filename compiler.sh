@@ -25,6 +25,7 @@ case "$mimetype" in
         echo "Recognized filetype: markdown"
         command="pandoc $file
          --citeproc
+         --pdf-engine=xelatex
          -V colorlinks
          -V geometry:a4paper
          -V geometry:margin=1in
