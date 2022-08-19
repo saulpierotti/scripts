@@ -17,7 +17,7 @@ case "$mimetype" in
     ;;
 "text/x-tex")
     echo "Recognized filetype: tex"
-    command="lualatex -interaction=nonstopmode -synctex=1 $file"
+    command="lualatex -interaction=nonstopmode --shell-escape -synctex=1 $file"
     ;;
 "text/plain") # includes markdown and many others
     case $file in
