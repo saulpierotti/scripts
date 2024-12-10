@@ -19,6 +19,13 @@ if [ -f "$target" ]; then
     else
         echo "Remote backup-gitlab already present. Skipping."
     fi
+    if ! grep -q "\[remote \"birneylab\"\]" "$target"; then
+        birneylab=$(echo "${origin//saulpierotti/birneylab}" |
+            sed "s/\[remote \"origin\"\]/\[remote \"birneylab\"\]/")
+        echo "$birneylab" >>"$target"
+    else
+        echo "Remote birneylab already present. Skipping."
+    fi
     if ! grep -q "\[remote \"all\"\]" "$target"; then
         all_url=$(grep "url = git@" "$target")
         echo "[remote \"all\"]" >>"$target"
