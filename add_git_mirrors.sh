@@ -5,26 +5,12 @@
 target=".git/config"
 if [ -f "$target" ]; then
     origin=$(sed -n "/\[remote \"origin\"]/,/\[*\]/p" $target | head -n -1)
-    if ! grep -q "\[remote \"backup-bitbucket\"\]" "$target"; then
-        bitbucket=$(echo "${origin//git@github.com/git@bitbucket.org}" |
-            sed "s/\[remote \"origin\"\]/\[remote \"backup-bitbucket\"\]/")
-        echo "$bitbucket" >>"$target"
-    else
-        echo "Remote backup-bitbucket already present. Skipping."
-    fi
     if ! grep -q "\[remote \"backup-gitlab\"\]" "$target"; then
         gitlab=$(echo "${origin//git@github.com/git@gitlab.com}" |
             sed "s/\[remote \"origin\"\]/\[remote \"backup-gitlab\"\]/")
         echo "$gitlab" >>"$target"
     else
         echo "Remote backup-gitlab already present. Skipping."
-    fi
-    if ! grep -q "\[remote \"birneylab\"\]" "$target"; then
-        birneylab=$(echo "${origin//saulpierotti/birneylab}" |
-            sed "s/\[remote \"origin\"\]/\[remote \"birneylab\"\]/")
-        echo "$birneylab" >>"$target"
-    else
-        echo "Remote birneylab already present. Skipping."
     fi
     if ! grep -q "\[remote \"all\"\]" "$target"; then
         all_url=$(grep "url = git@" "$target")
