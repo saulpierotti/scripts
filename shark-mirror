@@ -13,11 +13,12 @@
 #   -F, --force     also overwrite files that are newer at the destination
 #   -f, --fastq     also transfer FASTQ files (*.fastq, *.fq, compressed or not),
 #                   skipped by default unless PATH itself is one
+#   -l, --large     also transfer files larger than 100 MB, skipped by default
 #   -h, --help      show this help
 #
 # Files that are newer at the destination are not overwritten (rsync -u) unless
 # --force is given: they are skipped silently. Skipped FASTQs are also kept at
-# the destination under --delete.
+# the destination under --delete, and so are skipped large files.
 #
 # PATH can be relative or absolute, via ~/shark_exports or /exports, and for a
 # pull it does not need to exist locally yet. It must lie inside the mirror tree
@@ -39,7 +40,7 @@ PROTECTED=(
 die() { print -u2 -- "shark-mirror: $*"; exit 1 }
 usage() { sed -n '2,/^$/s/^# \{0,1\}//p' $ZSH_ARGZERO; }
 
-upload=0 fastq=0 upd=(-u) dry=() del=() paths=()
+upload=0 fastq=0 upd=(-u) maxsize=(--max-size=100M) dry=() del=() paths=()
 while (( $# )); do
   case $1 in
     -u|--upload)  upload=1 ;;
@@ -47,6 +48,7 @@ while (( $# )); do
     -d|--delete)  del=(--delete) ;;
     -f|--fastq)   fastq=1 ;;
     -F|--force)   upd=() ;;
+    -l|--large)   maxsize=() ;;
     -h|--help)    usage; exit 0 ;;
     --)           shift; paths+=("$@"); break ;;
     -*)           die "unknown option: $1 (see --help)" ;;
@@ -88,7 +90,7 @@ else
   [[ -n $host ]] || die "no SHARK host reachable"
 fi
 
-rsync_opts=(-a $upd -z --partial --progress -e "ssh ${(j: :)ssh_opts}" $dry $del)
+rsync_opts=(-a $upd $maxsize -z --partial --progress -e "ssh ${(j: :)ssh_opts}" $dry $del)
 # FASTQ patterns (plain or compressed), excluded unless --fastq
 fq_globs=('*.fastq' '*.fastq.*' '*.fq' '*.fq.*')
 
