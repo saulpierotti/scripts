@@ -1,0 +1,101 @@
+#!/bin/zsh
+# Sync paths of the local SHARK mirror (~/shark_exports, also reachable as
+# /exports) with the cluster's /exports.
+#
+#   shark-mirror [options] PATH...
+#
+#   (default)       pull PATH from the cluster into the local mirror
+#   -u, --upload    push PATH from the local mirror to the cluster (refused for
+#                   anything in or containing the protected dirs listed in PROTECTED:
+#                   archive/lucid-grpzeller-primary/{SHARED,input_data})
+#   -n, --dry-run   show what would be transferred, change nothing
+#   -d, --delete    also delete files missing on the source side
+#   -h, --help      show this help
+#
+# Files that are newer at the destination are never overwritten (rsync -u):
+# they are skipped silently.
+#
+# PATH can be relative or absolute, via ~/shark_exports or /exports, and for a
+# pull it does not need to exist locally yet. It must lie inside the mirror tree
+# and cannot be the mirror root itself.
+#
+# Host: $SHARK_HOST if set, otherwise `shark`, falling back to `shark_via_alice`.
+
+emulate -L zsh
+setopt err_exit no_unset pipe_fail
+
+LOCAL_ROOT=${${SHARK_MIRROR_ROOT:-$HOME/shark_exports}:A}
+REMOTE_ROOT=${SHARK_REMOTE_ROOT:-/exports}
+# remote directories that must never be uploaded to (hard stop, no override)
+PROTECTED=(
+  $REMOTE_ROOT/archive/lucid-grpzeller-primary/SHARED
+  $REMOTE_ROOT/archive/lucid-grpzeller-primary/input_data
+)
+
+die() { print -u2 -- "shark-mirror: $*"; exit 1 }
+usage() { sed -n '2,/^$/s/^# \{0,1\}//p' $ZSH_ARGZERO; }
+
+upload=0 dry=() del=() paths=()
+while (( $# )); do
+  case $1 in
+    -u|--upload)  upload=1 ;;
+    -n|--dry-run) dry=(-n) ;;
+    -d|--delete)  del=(--delete) ;;
+    -h|--help)    usage; exit 0 ;;
+    --)           shift; paths+=("$@"); break ;;
+    -*)           die "unknown option: $1 (see --help)" ;;
+    *)            paths+=("$1") ;;
+  esac
+  shift
+done
+(( ${#paths} )) || { usage >&2; exit 1 }
+
+# Resolve every path to its position inside the mirror before transferring anything.
+rels=()
+for p in $paths; do
+  abs=${p:A}   # absolute, symlinks resolved (/exports -> ~/shark_exports), works for missing paths
+  [[ $abs == $LOCAL_ROOT/?* ]] || die "not inside the mirror tree ($LOCAL_ROOT): $p"
+  rel=${abs#$LOCAL_ROOT/}
+  if (( upload )); then
+    # refuse a target that is, lies inside, or contains a protected remote directory
+    target=$REMOTE_ROOT/$rel
+    for d in $PROTECTED; do
+      [[ $target == $d || $target == $d/* || $d == $target/* ]] &&
+        die "uploads to $d are not allowed: $p -> $target"
+    done
+    [[ -e $abs ]] || die "does not exist locally: $p"
+  fi
+  rels+=("$rel")
+done
+
+# Pick a reachable host, sharing one ssh connection for all transfers.
+ctl=$HOME/.ssh/shark-mirror-%C   # short path: unix sockets are limited to 104 chars
+ssh_opts=(-o ControlMaster=auto -o "ControlPath=$ctl" -o ControlPersist=60)
+if [[ -n ${SHARK_HOST:-} ]]; then
+  host=$SHARK_HOST
+else
+  host=
+  for h in shark shark_via_alice; do
+    if ssh $ssh_opts -o ConnectTimeout=15 -o BatchMode=yes $h true 2>/dev/null; then host=$h; break; fi
+    print -u2 -- "shark-mirror: $h unreachable"
+  done
+  [[ -n $host ]] || die "no SHARK host reachable"
+fi
+
+rsync_opts=(-a -u -z --partial --progress -e "ssh ${(j: :)ssh_opts}" $dry $del)
+
+for rel in $rels; do
+  parent=${rel:h}; [[ $parent == . ]] && parent=
+  local_parent=$LOCAL_ROOT${parent:+/$parent}
+  remote_parent=$REMOTE_ROOT${parent:+/$parent}
+  if (( upload )); then
+    print -- "==> push $rel -> $host:$REMOTE_ROOT/$rel"
+    # create the remote parent directory in the same connection as rsync
+    mk=(); [[ -n $dry ]] || mk=(--rsync-path="mkdir -p ${(q)remote_parent} && rsync")
+    rsync $rsync_opts $mk "$LOCAL_ROOT/$rel" "$host:${(q)remote_parent}/"
+  else
+    print -- "==> pull $host:$REMOTE_ROOT/$rel -> $rel"
+    [[ -n $dry ]] || mkdir -p $local_parent
+    rsync $rsync_opts "$host:${(q)REMOTE_ROOT}/${(q)rel}" "$local_parent/"
+  fi
+done
